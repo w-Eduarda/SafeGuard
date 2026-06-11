@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Banco de Dados Principal
+  db:
+    image: postgres:15-alpine
+    container_name: safeguard-db
+    restart: always
+    environment:
+      POSTGRES_USER: safeguard_user
+      POSTGRES_PASSWORD: safeguard_password
+      POSTGRES_DB: safeguard_osint
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Cache e Filas (Redis)
+  redis:
+    image: redis:7-alpine
+    container_name: safeguard-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # Backend (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: safeguard-backend
+    restart: always
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://safeguard_user:safeguard_password@db:5432/safeguard_osint
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  # Frontend (Vite/React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: safeguard-frontend
+    restart: always
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

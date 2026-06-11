@@ -1,0 +1,1 @@
+Templade de criação issues.

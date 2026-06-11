@@ -1,0 +1,1 @@
+Configurações, segurança, etc.
