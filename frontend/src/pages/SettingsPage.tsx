@@ -78,6 +78,13 @@ export default function SettingsPage({ onCommandOpen }: SettingsPageProps) {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+  const handleSave = () => {
+    // Aqui você implementaria a lógica para salvar as preferências de notificação no backend.
+    // Por enquanto, apenas exibiremos uma mensagem de sucesso e logaremos o estado.
+    console.log("Preferências de notificação salvas:", notifications);
+    toast.success("Preferências de notificação salvas com sucesso!");
+  };
+
   const handleSaveProfile = () => {
     updateUser({ full_name: profileName });
     toast.success("Perfil atualizado com sucesso!");
