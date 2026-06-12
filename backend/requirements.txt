@@ -1,6 +1,6 @@
 fastapi==0.111.0
 uvicorn==0.30.1
-SQLAlchemy==2.0.30
+SQLAlchemy
 psycopg2-binary==2.9.9
 redis==5.0.6
 pydantic-settings==2.3.3
